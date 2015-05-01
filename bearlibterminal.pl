@@ -1,6 +1,50 @@
- :- module(bearlibterminal, []).
+ :- module(bearlibterminal, [
+ 	color_to_term/2,
+ 	terminal_open/1,
+ 	terminal_open/0,
+ 	terminal_close/0,
+ 	terminal_set/2,
+ 	terminal_set/1,
+ 	terminal_color/1,
+ 	terminal_bkcolor/1,
+ 	terminal_composition/1,
+ 	terminal_layer/1,
+ 	terminal_clear/0,
+ 	terminal_clear_area/4,
+ 	terminal_crop/4,
+ 	terminal_refresh/0,
+ 	terminal_put/3,
+ 	terminal_pick/4,
+ 	terminal_pick_color/4,
+ 	terminal_pick_bkcolor/3,
+ 	terminal_put_ext/9,
+ 	terminal_put_ext/5,
+ 	terminal_print/3,
+ 	terminal_print/4,
+ 	terminal_measure/2,
+ 	terminal_check/2,
+ 	terminal_state/2,
+ 	terminal_has_input/0,
+ 	terminal_read/1,
+ 	terminal_peek/1,
+ 	terminal_read_str/5,
+ 	terminal_delay/1,
+ 	color_from_name/2,
+ 	color_from_argb/5
+ 	]).
 
 :- use_foreign_library('lib/blt.so').
+
+get_col(color(R, G, B, A), Col) :-
+	blt_color_from_argb(A, R, G, B, Col).
+
+get_col(Col, Col2) :-
+	(Col = [_|_] ; atom(Col)),
+	write(hi), nl,
+	blt_color_from_name(Col, Col2).
+
+get_col(Col, Col) :-
+	number(Col).
 
 color_to_term(Col, Term) :-
 	blt_color_to_term(Col, Term).
@@ -20,21 +64,13 @@ terminal_set(Config, Result) :-
 terminal_set(Config) :-
 	blt_set(Config, _).
 
-terminal_color(color(R, G, B, A)) :-
-	blt_color_from_argb(A, R, G, B, Col),
-	blt_color(Col).
-
 terminal_color(Col) :-
-	Col \= color(_, _, _, _),
-	blt_color(Col).
-
-terminal_bkcolor(color(R, G, B, A)) :-
-	blt_color_from_argb(A, R, G, B, Col),
-	blt_bkcolor(Col).
+	get_col(Col, Col2),
+	blt_color(Col2).
 
 terminal_bkcolor(Col) :-
-	Col \= color(_, _, _, _),
-	blt_bkcolor(Col).
+	get_col(Col, Col2),
+	blt_bkcolor(Col2).
 
 terminal_composition(OnOff) :-
 	(
@@ -76,8 +112,11 @@ terminal_pick_bkcolor(X, Y, Col) :-
 terminal_put_ext(X, Y, DX, DY, Code, TL, BL, TR, BR) :-
 	blt_put_ext(X, Y, DX, DY, Code, TL, BL, TR, BR).
 
-terminal_put_ext(X,Y, DX, DY, Code) :-
+terminal_put_ext(X, Y, DX, DY, Code) :-
 	blt_put_ext(X, Y, DX, DY, Code).
+
+terminal_print(X, Y, Str) :-
+	blt_print(X, Y, Str, _).
 
 terminal_print(X, Y, Str, Size) :-
 	blt_print(X, Y, Str, Size).
@@ -112,8 +151,3 @@ color_from_name(Name, Col) :-
 
 color_from_argb(A, R, G, B, Col) :-
 	blt_color_from_argb(A, R, G, B, Col).
-
-go :-
-	blt_open(_),
-	blt_composition(on),
-	blt_refresh.

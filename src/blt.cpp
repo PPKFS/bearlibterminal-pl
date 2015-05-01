@@ -26,18 +26,18 @@ PREDICATE(blt_close, 0)
 
 PREDICATE(blt_set, 2)
 {
-	return A2 = terminal_set((char*)A1);
+	return A2 = terminal_set((wchar_t*)A1);
 }
 
 PREDICATE(blt_color, 1)
 {
-	terminal_color((int)A1);
+	terminal_color((color_t)(long)A1);
 	return TRUE;
 }
 
 PREDICATE(blt_bkcolor, 1)
 {
-	terminal_bkcolor((int)A1);
+	terminal_bkcolor((color_t)(long)A1);
 	return TRUE;
 }
 
@@ -113,12 +113,12 @@ PREDICATE(blt_put_ext, 5)
 
 PREDICATE(blt_print, 4)
 {
-	return A4 = terminal_print((int)A1, (int)A2, (char*)A3);
+	return A4 = terminal_print((int)A1, (int)A2, (wchar_t*)A3);
 }
 
 PREDICATE(blt_measure, 2)
 {
-	return A2 = terminal_measure((char*)A1);
+	return A2 = terminal_measure((wchar_t*)A1);
 }
 
 PREDICATE(blt_state, 2)
@@ -164,7 +164,7 @@ PREDICATE(blt_delay, 1)
 
 PREDICATE(blt_color_from_name, 2)
 {
-	return A2 = (long)color_from_name((char*)A1);
+	return A2 = (long)color_from_name((wchar_t*)A1);
 }
 
 PREDICATE(blt_color_from_argb, 5)
