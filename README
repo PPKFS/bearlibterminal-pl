@@ -1,5 +1,8 @@
 SWI-Prolog bindings for BearLibTerminal (http://foo.wyrd.name/en:bearLibTerminal).
 
 To build:
-Build BearLibTerminal and place libBearTerminal.so in the same directory as bearlibterminal.pl.
-Run make.
+Build BearLibTerminal. 
+Place libBearTerminal.so in the working directory. Place Include (containing BearLibTerminal.h) in lib/. 
+(For the sample) Place Media/ in the working directory.
+Run make blt2.
+To run the sample, run swipl omnisample.pl.
